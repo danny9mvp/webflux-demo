@@ -7,19 +7,24 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
-public class EmployeeWebClient {
-    private WebClient client = WebClient.create("https://jsonplaceholder.typicode.com");
+public class EmployeeRestClient {
+
+    private final WebClient client;
+
+    public EmployeeRestClient(WebClient client) {
+        this.client = client;
+    }
 
     public Mono<Employee> getEmployeeById(Long id) {
         return client.get()
-                .uri("/users/{id}", id)
+                .uri("/{id}", id)
                 .retrieve()
                 .bodyToMono(Employee.class);
     }
 
     public Flux<Employee> getAllEmployees() {
         return client.get()
-                .uri("/users")
+                .uri("/")
                 .retrieve()
                 .bodyToFlux(Employee.class);
     }
